@@ -29,6 +29,12 @@ else
          cp /vagrant/resources/configs/portal-ext.properties /home/$LR_USER/liferay
        fi
 
+       echo "Copying portal-ext.properties to \"$LR_PATH\""
+       cp /vagrant/resources/configs/liferay/portal-ext.properties $LR_PATH/
+
+       echo "Copying setenv.sh to \"$LR_PATH/tomcat-7.0.62/bin/\""
+       cp /vagrant/resources/configs/liferay/tomcat/bin/setenv.sh $LR_PATH/tomcat-7.0.62/bin/
+
        sudo chown -R $LR_USER:$LR_USER /home/$LR_USER/
     fi
 
