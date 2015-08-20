@@ -2,7 +2,7 @@ configs:
   use: 'dev'
   dev:
     box: 'chef/centos-7.0'
-    memory_size: '2048'
+    memory_size: '4096'
     public_ip: '192.168.33.12'
     shell_scripts_path: 'scripts'
     db_user: 'lportal'
