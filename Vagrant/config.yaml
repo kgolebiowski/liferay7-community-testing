@@ -1,0 +1,12 @@
+configs:
+  use: 'dev'
+  dev:
+    box: 'chef/centos-7.0'
+    memory_size: '2048'
+    public_ip: '192.168.33.12'
+    shell_scripts_path: 'scripts'
+    db_user: 'lportal'
+    db_password: 'lportal'
+    db_name: 'lportal'
+    lr_user: 'lportal'
+    lr_file: 'liferay-portal-tomcat-7.0-ce-m7-20150819114119178.zip'

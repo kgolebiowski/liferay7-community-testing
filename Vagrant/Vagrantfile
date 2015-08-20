@@ -1,0 +1,107 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+####################################
+#
+# script: Liferay 7 on CentOS 7
+# version: 1.0
+#
+####################################
+
+require 'yaml'
+require './scripts/vagrant_utils/os_detector.rb'
+
+current_dir    = File.dirname(File.expand_path(__FILE__))
+
+common_configs = YAML.load_file("#{current_dir}/config.yaml")
+vagrant_config = common_configs['configs'][common_configs['configs']['use']]
+
+Vagrant.configure(2) do |config|
+  config.vm.box = vagrant_config['box']
+  config.vm.network "private_network", ip: vagrant_config['public_ip']
+  config.vm.network "forwarded_port", guest: 80, host: 1080
+  config.vm.network "forwarded_port", guest: 5432, host: 5432
+
+  config.vm.provider "virtualbox" do |vb|
+     vb.memory = vagrant_config['memory_size']
+  end
+
+  #
+  # OS
+  #
+
+  config.vm.provision "shell" do |s|
+    s.path = "#{vagrant_config['shell_scripts_path']}/install_common_tools.sh"
+  end
+
+  config.vm.provision "shell" do |s|
+    s.path = "#{vagrant_config['shell_scripts_path']}/timezone_and_locale.sh"
+  end
+
+  config.vm.provision "shell" do |s|
+    s.path = "#{vagrant_config['shell_scripts_path']}/create_system_user.sh"
+    s.args = [vagrant_config['lr_user'], vagrant_config['lr_user'], "123"]
+  end
+
+  config.vm.provision "shell" do |s|
+    s.path = "#{vagrant_config['shell_scripts_path']}/install_oracle_java.sh"
+    s.args = ["7", "79", "15"]
+  end
+
+  #
+  # Apache services
+  #
+
+  config.vm.provision "shell" do |s|
+    s.path = "#{vagrant_config['shell_scripts_path']}/install_apache_httpd.sh"
+  end
+
+  config.vm.provision "shell" do |s|
+    s.path = "#{vagrant_config['shell_scripts_path']}/apply_mod_proxy.sh"
+  end
+
+  #
+  # Database services
+  #
+
+  config.vm.provision "shell" do |s|
+    s.path = "#{vagrant_config['shell_scripts_path']}/install_postgres.sh"
+  end
+
+  config.vm.provision "shell" do |s|
+    s.path = "#{vagrant_config['shell_scripts_path']}/configure_postgres.sh"
+    s.args = [ vagrant_config['db_user'], vagrant_config['db_password'], vagrant_config['db_name'] ]
+  end
+
+
+  #
+  # Liferay
+  #
+
+  config.vm.provision "shell" do |s|
+    s.path = "#{vagrant_config['shell_scripts_path']}/install_liferay.sh"
+    s.args = [ vagrant_config['lr_user'], vagrant_config['lr_file'] ]
+  end
+
+  #
+  # Further configuration
+  #
+
+  if Vagrant::Util::Platform::mac?
+
+    # Enable port forwarding on startup
+    config.trigger.after [:provision, :up, :reload] do
+        system(
+            'echo "
+                rdr pass on lo0 inet proto tcp from any to 127.0.0.1 port 80 -> 127.0.0.1 port 1080
+            " | sudo pfctl -ef - > /dev/null 2>&1; echo "==> Fowarding Ports: 80 -> 1080"'
+        )
+    end
+
+    # Disable port forwarding on shutdown
+    config.trigger.after [:halt, :destroy] do
+        system("sudo pfctl -df /etc/pf.conf > /dev/null 2>&1; echo '==> Removing Port Forwarding & Disabling pf'")
+    end
+  end
+
+end
