@@ -10,3 +10,4 @@ configs:
     db_name: 'lportal'
     lr_user: 'lportal'
     lr_file: 'liferay-portal-tomcat-7.0-ce-m7-20150819114119178.zip'
+    lr_download_path: 'http://sourceforge.net/projects/lportal/files/Liferay%20Portal/7.0.0%20M7/liferay-portal-tomcat-7.0-ce-m7-20150819114119178.zip/download'

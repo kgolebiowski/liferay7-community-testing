@@ -80,7 +80,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell" do |s|
     s.path = "#{vagrant_config['shell_scripts_path']}/install_liferay.sh"
-    s.args = [ vagrant_config['lr_user'], vagrant_config['lr_file'] ]
+    s.args = [ vagrant_config['lr_user'], vagrant_config['lr_file'], vagrant_config['lr_download_path'] ]
   end
 
   #
