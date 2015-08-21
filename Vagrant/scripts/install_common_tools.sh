@@ -14,6 +14,6 @@ echo "Installing packages from CentOS REPO"
 yum -y install epel-release
 
 echo "Installing packages from EPEL REPO"
-yum -y install htop apachetop
+yum -y install htop apachetop dos2unix
 
 echo "Done."

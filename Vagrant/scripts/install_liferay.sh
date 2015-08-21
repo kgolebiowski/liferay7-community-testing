@@ -42,6 +42,9 @@ else
      echo "Copying setenv.sh to \"$LR_PATH/tomcat-7.0.62/bin/\""
      cp $CONFIGS_FOLDER/liferay/tomcat/bin/setenv.sh $LR_PATH/tomcat-7.0.62/bin/
 
+     # Set unix line endings when host is running on Windows
+     dos2unix $LR_PATH/tomcat-7.0.62/bin/setenv.sh
+
      sudo chown -R $LR_USER:$LR_USER /home/$LR_USER/
   fi
 fi
