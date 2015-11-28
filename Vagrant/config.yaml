@@ -1,13 +1,13 @@
 configs:
   use: 'dev'
   dev:
-    box: 'chef/centos-7.0'
+    box: 'bento/centos-7.1'
     memory_size: '4096'
-    public_ip: '192.168.33.12'
+    public_ip: '10.20.1.33'
     shell_scripts_path: 'scripts'
     db_user: 'lportal'
     db_password: 'lportal'
     db_name: 'lportal'
     lr_user: 'lportal'
-    lr_file: 'liferay-portal-tomcat-7.0-ce-m7-20150819114119178.zip'
-    lr_download_path: 'http://sourceforge.net/projects/lportal/files/Liferay%20Portal/7.0.0%20M7/liferay-portal-tomcat-7.0-ce-m7-20150819114119178.zip/download'
+    lr_file: 'liferay-portal-tomcat-7.0-ce-a3-20151119130239619.zip'
+    lr_download_path: ''
