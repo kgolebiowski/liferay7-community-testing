@@ -12,3 +12,5 @@
 hs_err_pid*
 Vagrant/.vagrant
 Vagrant/resources/installs
+liferay7-community-dev-testing/.idea
+*.iml
